@@ -33,6 +33,7 @@ FLIBUSTA_SEARCH = f"{FLIBUSTA_BASE}/opds/search"
 FORMATS = {"fb2": "FB2", "epub": "EPUB", "mobi": "MOBI", "txt": "TXT", "html": "HTML", "rtf": "RTF", "pdf": "PDF"}
 _FORMATS_DL = {"fb2", "epub", "mobi", "txt", "html", "rtf"}
 FORMAT_EMOJI = {"fb2": "\U0001f4d8", "epub": "\U0001f4d7", "mobi": "\U0001f4d9", "txt": "\U0001f4c4", "html": "\U0001f310", "rtf": "\U0001f4dd", "pdf": "\U0001f4d5"}
+_DEFAULT_EMOJI = "\U0001f4c4"
 BOOKS_PER_PAGE = 5
 DOWNLOAD_TIMEOUT = aiohttp.ClientTimeout(total=300)
 SEARCH_TIMEOUT = aiohttp.ClientTimeout(total=15)
@@ -256,7 +257,7 @@ def _fmt_formats(formats: list[str]) -> str:
     visible = [f for f in formats if f != "download"]
     if not visible:
         return "\U0001f4e5 \u0421\u043a\u0430\u0447\u0430\u0442\u044c"
-    return " \u00b7 ".join(f"{FORMAT_EMOJI.get(f, '\U0001f4c4')}`{f.upper()}`" for f in visible)
+    return " \u00b7 ".join(f"{FORMAT_EMOJI.get(f, _DEFAULT_EMOJI)}`{f.upper()}`" for f in visible)
 
 
 def format_search_rich(books: list[dict], page: int, query: str = "") -> str:
@@ -305,7 +306,7 @@ def format_book_detail(book: dict) -> str:
     if visible_fmts:
         lines.append(f"\n---\n**\U0001f4e5 \u0414\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0435 \u0444\u043e\u0440\u043c\u0430\u0442\u044b:**")
         for fmt in visible_fmts:
-            lines.append(f"- {FORMAT_EMOJI.get(fmt, '\U0001f4c4')} **{FORMATS.get(fmt, fmt.upper())}**")
+            lines.append(f"- {FORMAT_EMOJI.get(fmt, _DEFAULT_EMOJI)} **{FORMATS.get(fmt, fmt.upper())}**")
     else:
         lines.append(f"\n---\n**\U0001f4e5 \u0421\u043a\u0430\u0447\u0430\u0442\u044c \u043a\u043d\u0438\u043a\u0443**")
     lines.append("\n---\n*\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0444\u043e\u0440\u043c\u0430\u0442:*")
@@ -330,7 +331,7 @@ def format_book_detail(book: dict) -> str:
     if visible_fmts:
         lines.append(f"**\U0001f4e5 \u0414\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0435 \u0444\u043e\u0440\u043c\u0430\u0442\u044b:**\n")
         for fmt in visible_fmts:
-            lines.append(f"- {FORMAT_EMOJI.get(fmt, '\U0001f4c4')} **{FORMATS.get(fmt, fmt.upper())}**")
+            lines.append(f"- {FORMAT_EMOJI.get(fmt, _DEFAULT_EMOJI)} **{FORMATS.get(fmt, fmt.upper())}**")
     else:
         lines.append(f"**\U0001f4e5 \u0421\u043a\u0430\u0447\u0430\u0442\u044c \u043a\u043d\u0438\u0433\u0443**\n")
     lines.append("\n---\n*\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0444\u043e\u0440\u043c\u0430\u0442:*")
@@ -368,7 +369,7 @@ def build_formats_keyboard(book_id: str, formats: list[str], page: int = 0) -> I
         row = []
         for fmt in visible:
             row.append(InlineKeyboardButton(
-                text=f"{FORMAT_EMOJI.get(fmt, '\U0001f4c4')} {FORMATS.get(fmt, fmt.upper())}",
+                text=f"{FORMAT_EMOJI.get(fmt, _DEFAULT_EMOJI)} {FORMATS.get(fmt, fmt.upper())}",
                 callback_data=f"dl_{book_id}_{fmt}",
             ))
             if len(row) == 3:
